@@ -14,6 +14,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             resultImageSize: '=',
             resultImageFormat: '@',
             resultImageQuality: '=',
+            canvasSize: '=',
 
             onChange: '&',
             onLoadBegin: '&',
@@ -47,8 +48,10 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             };
 
             var updateAreaCoords = function (scope) {
-                var areaCoords = cropHost.getAreaCoords();
-                scope.areaCoords = areaCoords;
+                if (typeof scope.areaCoords != 'undefined') {
+                    var areaCoords = cropHost.getAreaCoords();
+                    scope.areaCoords = areaCoords;
+                }
             }
 
             // Wrapper to safely exec functions within $apply on a running $digest cycle
@@ -106,6 +109,24 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                 cropHost.setResultImageQuality(scope.resultImageQuality);
                 updateResultImage(scope);
             });
+
+            scope.$watch('canvasSize', function (newVal, oldVal) {
+                if(newVal) {
+                    var update = false;
+                    if (!oldVal) {
+                        update = true;
+                    }
+                    else if (newVal[0]===oldVal[0] && newVal[1]===oldVal[1]) {
+                        update = false;
+                    }
+
+                    if(update) {
+                        cropHost.setCanvasSize(newVal);
+                        updateResultImage(scope);
+                    }
+                }
+            });
+
 
             // Update CropHost dimensions when the directive element is resized
             scope.$watch(

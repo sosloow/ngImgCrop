@@ -81,23 +81,30 @@
 <div>
     <button ng-click="imageDataURI=''">Reset Image</button>
 </div>
-<pre style="background: lightgrey">
-    {{bob|json}}
+
+<div>
+    <button ng-click="click()">Resize</button>
+</div>
+
+<pre>
+    {{model1.areaCoords|json}}
 </pre>
-<div ng-if="enableCrop" class="cropArea" ng-class="{'big':size=='big', 'medium':size=='medium', 'small':size=='small'}">
-    <img-crop image="imageDataURI"
-              result-image="$parent.resImageDataURI"
+
+<div class="cropArea" ng-class="{'big':size=='big', 'medium':size=='medium', 'small':size=='small'}">
+    <img-crop image="model1.imageDataURI"
+              result-image="model1.resImageDataURI"
               change-on-fly="changeOnFly"
-              area-type="{{type}}"
-              area-min-size="selMinSize"
-              result-image-format="{{resImgFormat}}"
-              result-image-quality="resImgQuality"
-              result-image-size="resImgSize"
+              area-type="circle"
+              canvas-size="stuff.getDimensions()"
+              area-min-size="100"
+              result-image-format="image/png"
+              result-image-quality="1"
+              result-image-size="200"
               on-change="onChange($dataURI)"
               on-load-begin="onLoadBegin()"
               on-load-done="onLoadDone()"
               on-load-error="onLoadError()"
-              area-coords="$parent.bob"
+              area-coords="model1.areaCoords"
             ></img-crop>
     <!--aspect-ratio="aspectRatio"-->
 </div>
@@ -110,50 +117,65 @@
     </div>
 </div>
 
+
 <script type="text/javascript">
     angular.module('app', ['ngImgCrop'])
             .controller('Ctrl', function ($scope) {
-                $scope.bob = {};
-                $scope.$watch('bob', function() {
-                   console.log('watch');
-                });
-                $scope.size = 'small';
-                $scope.type = 'circle';
-                $scope.imageDataURI = '';
-                $scope.resImageDataURI = '';
-                $scope.resImgFormat = 'image/png';
-                $scope.resImgQuality = 1;
-                $scope.selMinSize = 100;
-                $scope.resImgSize = 200;
-                //$scope.aspectRatio=1.2;
+                $scope.dims = null;
+
+                $scope.model1 = {
+                    resImageDataURI: '',
+                    imageDataURI: 'https://i.chzbgr.com/maxW500/8389339392/hB7D0EE41/'
+                };
+
+                $scope.stuff = {
+                    getDimensions: function () {
+                        if (!$scope.dims && $scope.renderedImageSize) {
+                            $scope.dims = [$scope.renderedImageSize.width, $scope.renderedImageSize.height];
+                        }
+                        return $scope.dims;
+                    }
+                };
+
+                $scope.click = function() {
+                    $scope.renderedImageSize = {
+                        height: 200,
+                        width: 100
+                    };
+                };
+
+                $scope.size = 'big';
+
                 $scope.onChange = function ($dataURI) {
-                    console.log('onChange fired');
-                    console.log($scope.bob);
+//                    console.log('onChange fired');
                 };
                 $scope.onLoadBegin = function () {
-                    console.log('onLoadBegin fired');
+//                    console.log('onLoadBegin fired');
                 };
                 $scope.onLoadDone = function () {
-                    console.log('onLoadDone fired');
+//                    console.log('onLoadDone fired');
                 };
                 $scope.onLoadError = function () {
-                    console.log('onLoadError fired');
+//                    console.log('onLoadError fired');
                 };
-                var handleFileSelect = function (evt) {
-                    var file = evt.currentTarget.files[0];
-                    var reader = new FileReader();
-                    reader.onload = function (evt) {
-                        $scope.$apply(function ($scope) {
-                            $scope.imageDataURI = evt.target.result;
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                };
-                angular.element(document.querySelector('#fileInput')).on('change', handleFileSelect);
-                $scope.$watch('resImageDataURI', function () {
-                    //console.log('Res image', $scope.resImageDataURI);
-                });
-            });
+//                var handleFileSelect = function (evt) {
+//                    var file = evt.currentTarget.files[0];
+//                    var reader = new FileReader();
+//                    reader.onload = function (evt) {
+//                        $scope.$apply(function ($scope) {
+//                            $scope.imageDataURI = evt.target.result;
+//                        });
+//                    };
+//                    reader.readAsDataURL(file);
+//                };
+//                angular.element(document.querySelector('#fileInput')).on('change', handleFileSelect);
+//                $scope.$watch('resImageDataURI', function () {
+//                    //console.log('Res image', $scope.resImageDataURI);
+//                });
+
+
+            })
+    ;
 </script>
 </body>
 </html>

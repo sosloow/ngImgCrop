@@ -248,6 +248,12 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', funct
 
         };
 
+        this.setCanvasSize = function (dimensions) {
+            maxCanvasDims = dimensions;
+            minCanvasDims = dimensions;
+            resetCropHost();
+        };
+
         this.setAreaMinSize = function (size) {
             size = parseInt(size, 10);
             if (!isNaN(size)) {
