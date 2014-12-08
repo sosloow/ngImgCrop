@@ -10,6 +10,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             changeOnFly: '=',
             areaCoords: '=',
             areaType: '@',
+            aspectRatio: '=',
             areaMinSize: '=',
             resultImageSize: '=',
             resultImageFormat: '@',
@@ -91,6 +92,10 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             });
             scope.$watch('areaType', function () {
                 cropHost.setAreaType(scope.areaType);
+                updateResultImage(scope);
+            });
+            scope.$watch('aspectRatio',function(){
+                cropHost.setAspectRatio(scope.aspectRatio);
                 updateResultImage(scope);
             });
             scope.$watch('areaMinSize', function () {
