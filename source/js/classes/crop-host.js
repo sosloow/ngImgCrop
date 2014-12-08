@@ -28,7 +28,8 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         // Object Pointers
         var ctx = null,
             image = null,
-            theArea = null;
+            theArea = null,
+            self=this;
 
         // Dimensions
         var minCanvasDims = [100, 100],
