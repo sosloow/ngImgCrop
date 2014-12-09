@@ -193,11 +193,6 @@ crop.factory('cropArea', ['cropCanvas', function (CropCanvas) {
             if (heightWithRatio < canvasH && se.y < canvasH) {
                 newSize.h = newSize.w / this._aspectRatio;
             }
-            else if(heightWithRatio > canvasH) {
-                heightWithRatio = canvasH;
-                newSize.h = canvasH;
-                newSize.w = newSize.h * this._aspectRatio;
-            }
             else {
                 if((newSize.h * this._aspectRatio) <= canvasW) {
                     newSize.w = newSize.h * this._aspectRatio;
