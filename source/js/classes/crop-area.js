@@ -67,12 +67,7 @@ crop.factory('cropArea', ['cropCanvas', function (CropCanvas) {
     };
 
     CropArea.prototype.getPosition = function () {
-        return {
-            left: this._x - this._size / 2,
-            top: this._y - this._size / 2,
-            width: this._size,
-            height: this._size
-        }
+        return this._size;
     }
 
     CropArea.prototype.getMinSize = function () {
@@ -197,8 +192,19 @@ crop.factory('cropArea', ['cropCanvas', function (CropCanvas) {
 
             if (heightWithRatio < canvasH && se.y < canvasH) {
                 newSize.h = newSize.w / this._aspectRatio;
-            } else {
+            }
+            else if(heightWithRatio > canvasH) {
+                heightWithRatio = canvasH;
+                newSize.h = canvasH;
                 newSize.w = newSize.h * this._aspectRatio;
+            }
+            else {
+                if((newSize.h * this._aspectRatio) <= canvasW) {
+                    newSize.w = newSize.h * this._aspectRatio;
+                }
+                else {
+                    newSize.h = newSize.w / this._aspectRatio;
+                }
             }
         }
 
