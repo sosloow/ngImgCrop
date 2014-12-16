@@ -68,7 +68,7 @@ crop.factory('cropArea', ['cropCanvas', function (CropCanvas) {
 
     CropArea.prototype.getPosition = function () {
         return this._size;
-    }
+    };
 
     CropArea.prototype.getMinSize = function () {
         return this._minSize;
@@ -83,6 +83,8 @@ crop.factory('cropArea', ['cropCanvas', function (CropCanvas) {
     CropArea.prototype.setCenterPoint = function (point) {
         var s = this.getSize();
         this.setSize({x: point.x - s.w / 2, y: point.y - s.h / 2, w: s.w, h: s.h});
+        this._events.trigger('area-resize');
+        this._events.trigger('area-move');
     };
 
     CropArea.prototype.setMinSize = function (size) {

@@ -29,14 +29,14 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         var ctx = null,
             image = null,
             theArea = null,
-            self=this;
+            self = this;
 
         // Dimensions
         var minCanvasDims = [100, 100],
             maxCanvasDims = [300, 300];
 
         // Result Image size
-        var resImgSize={w: 200, h: 200};
+        var resImgSize = {w: 200, h: 200};
 
         // Result Image type
         var resImgFormat = 'image/png';
@@ -106,10 +106,9 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
                     ch = cw / theArea._aspectRatio;
                 }
 
-                theArea.setSize({ w: Math.min(200, cw / 2),
-                    h: Math.min(200, ch / 2)});
+                theArea.setSize({ w: Math.min(200, cw / 2), h: Math.min(200, ch / 2)});
                 //TODO: set top left corner point
-                theArea.setCenterPoint({x: ctx.canvas.width/2, y: ctx.canvas.height/2});
+                theArea.setCenterPoint({x: ctx.canvas.width / 2, y: ctx.canvas.height / 2});
 
             } else {
                 elCanvas.prop('width', 0).prop('height', 0).css({'margin-top': 0});
@@ -256,26 +255,22 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
                     ratioNewCurHeight = ctx.canvas.height / curHeight,
                     ratioMin = Math.min(ratioNewCurWidth, ratioNewCurHeight);
 
-                //TODO: use top left corner point
-                theArea.setSize({w: theArea.getSize().w * ratioMin,
-                    h: theArea.getSize().h * ratioMin});
                 var center = theArea.getCenterPoint();
-                theArea.setCenterPoint({x: center.x*ratioNewCurWidth, y: center.y*ratioNewCurHeight});
+                theArea.setSize({w: theArea.getSize().w * ratioNewCurWidth, h: theArea.getSize().h * ratioNewCurHeight});
+                theArea.setCenterPoint({x: center.x * ratioNewCurWidth, y: center.y * ratioNewCurHeight});
             } else {
                 elCanvas.prop('width', 0).prop('height', 0).css({'margin-top': 0});
             }
 
             drawScene();
-
         };
 
-        this.setAspectRatio=function(ratio) {
-            if (angular.isUndefined(ratio))
-            {
+        this.setAspectRatio = function (ratio) {
+            if (angular.isUndefined(ratio)) {
                 return;
             }
-            ratio=parseFloat(ratio);
-            if(!isNaN(ratio)) {
+            ratio = parseFloat(ratio);
+            if (!isNaN(ratio)) {
                 theArea.setAspectRatio(ratio);
                 drawScene();
             }
@@ -288,24 +283,19 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         };
 
         this.setAreaMinSize = function (size) {
-            if (angular.isUndefined(size))
-            {
+            if (angular.isUndefined(size)) {
                 return;
             }
-            size={w: parseInt(size.w,10),
-                h: parseInt(size.h,10)};
-            if(!isNaN(size.w) && !isNaN(size.h)) {
-                theArea.setMinSize(size);
-                drawScene();
+            size = {w: parseInt(size.w, 10),
+                h: parseInt(size.h, 10)};
+            if (!isNaN(size.w) && !isNaN(size.h)) {
             }
         };
 
-        this.getResultImageSize=function() {
-            if (resImgSize == "selection")
-            {
+        this.getResultImageSize = function () {
+            if (resImgSize == "selection") {
                 return theArea.getSize();
             }
-
             return resImgSize;
         };
 
@@ -315,16 +305,14 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
             }
 
             //allow setting of size to "selection" for mirroring selection's dimensions
-            if (angular.isString(size) && isNaN(parseFloat(size)))
-            {
+            if (angular.isString(size) && isNaN(parseFloat(size))) {
                 resImgSize = size;
                 return;
             }
 
             //allow scalar values for square-like selection shapes
             var parsedSize = parseInt(size, 10);
-            if (!isNaN(parsedSize))
-            {
+            if (!isNaN(parsedSize)) {
                 size = {w: parsedSize,
                     h: parsedSize};
             } else {
@@ -332,14 +320,14 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
                     h: parseInt(size.h, 10)};
             }
 
-            if(!isNaN(size.w) && !isNaN(size.h)) {
-                resImgSize=size;
+            if (!isNaN(size.w) && !isNaN(size.h)) {
+                resImgSize = size;
                 drawScene();
             }
         };
 
         // returns a string of the selection area's type
-        this.getAreaType=function() {
+        this.getAreaType = function () {
             return theArea.getType();
         };
 
@@ -358,15 +346,14 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
             var center = theArea.getCenterPoint();
             var curSize = theArea.getSize(),
                 curMinSize = theArea.getMinSize(),
-                curX= center.x,
-                curY= center.y;
+                curX = center.x,
+                curY = center.y;
 
             var AreaClass = CropAreaCircle;
             if (type === 'square') {
                 AreaClass = CropAreaSquare;
-            } else if (type==='rectangle')
-            {
-                AreaClass=CropAreaRectangle;
+            } else if (type === 'rectangle') {
+                AreaClass = CropAreaRectangle;
             }
             theArea = new AreaClass(ctx, events);
             theArea.setMinSize(curMinSize);

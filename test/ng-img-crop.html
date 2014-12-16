@@ -27,6 +27,10 @@
             width: 300px;
             height: 200px;
         }
+
+        .cropArea.hidden {
+           display: none;
+        }
     </style>
 </head>
 <body ng-controller="Ctrl">
@@ -86,20 +90,31 @@
     <button ng-click="click()">Resize</button>
 </div>
 
+<div>
+    <button ng-click="loadImage()">loadImage</button>
+</div>
+
+<div>
+    <button ng-click="show()">Show</button>
+</div>
+
+
 <pre>
-    {{model1.areaCoords|json}}
+    {{areaCoords|json}}
 </pre>
 
-<div class="cropArea" ng-class="{'big':size=='big', 'medium':size=='medium', 'small':size=='small'}">
-    <img-crop image="model1.imageDataURI"
+<div class="cropArea {{model1.hidden}}" ng-class="{'big':size=='big', 'medium':size=='medium', 'small':size=='small'}">
+    <img-crop
+                image="model1.imageDataURI"
               result-image="model1.resImageDataURI"
               change-on-fly="changeOnFly"
-              area-type="circle"
+              area-type="rectangle"
+              area-coords="areaCoords"
               canvas-size="stuff.getDimensions()"
-              area-min-size="100"
               result-image-format="image/png"
               result-image-quality="1"
-              result-image-size="200"
+              aspect-ratio="1.77777777777"
+              result-image-size="resultSize"
               on-change="onChange($dataURI)"
               on-load-begin="onLoadBegin()"
               on-load-done="onLoadDone()"
@@ -107,13 +122,14 @@
               area-coords="model1.areaCoords"
             ></img-crop>
     <!--aspect-ratio="aspectRatio"-->
+    <!--aspect-ratio="1.77777777777"-->
 </div>
 
 <div style="text-align:center">
     <h3>Result</h3>
 
     <div>
-        <img ng-src="{{resImageDataURI}}"/>
+        <img ng-src="{{model1.resImageDataURI}}"/>
     </div>
 </div>
 
@@ -121,11 +137,18 @@
 <script type="text/javascript">
     angular.module('app', ['ngImgCrop'])
             .controller('Ctrl', function ($scope) {
+                $scope.areaCoords = '';
                 $scope.dims = null;
+
+                $scope.resultSize = {
+                    h: 200,
+                    w: 200
+                };
 
                 $scope.model1 = {
                     resImageDataURI: '',
-                    imageDataURI: 'https://i.chzbgr.com/maxW500/8389339392/hB7D0EE41/'
+                    imageDataURI: '',
+                    hidden: 'hidden'
                 };
 
                 $scope.stuff = {
@@ -135,6 +158,15 @@
                         }
                         return $scope.dims;
                     }
+                };
+
+                $scope.loadImage = function() {
+                    $scope.model1.imageDataURI = 'http://i.chzbgr.com/maxW500/8389339392/hB7D0EE41/';
+                };
+
+                $scope.show = function() {
+
+                    $scope.model1.hidden = '';
                 };
 
                 $scope.click = function() {

@@ -16,7 +16,6 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             resultImageFormat: '@',
             resultImageQuality: '=',
             canvasSize: '=',
-
             onChange: '&',
             onLoadBegin: '&',
             onLoadDone: '&',
@@ -37,13 +36,13 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             var storedResultImage;
 
             var updateResultImage = function (scope) {
+                updateAreaCoords(scope);
                 var resultImage = cropHost.getResultImageDataURI();
                 if (storedResultImage !== resultImage) {
                     storedResultImage = resultImage;
                     if (angular.isDefined(scope.resultImage)) {
                         scope.resultImage = resultImage;
                     }
-                    updateAreaCoords(scope)
                     scope.onChange({$dataURI: scope.resultImage});
                 }
             };
@@ -53,7 +52,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                     var areaCoords = cropHost.getAreaCoords();
                     scope.areaCoords = areaCoords;
                 }
-            }
+            };
 
             // Wrapper to safely exec functions within $apply on a running $digest cycle
             var fnSafeApply = function (fn) {
@@ -94,7 +93,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                 cropHost.setAreaType(scope.areaType);
                 updateResultImage(scope);
             });
-            scope.$watch('aspectRatio',function(){
+            scope.$watch('aspectRatio', function () {
                 cropHost.setAspectRatio(scope.aspectRatio);
                 updateResultImage(scope);
             });
@@ -116,16 +115,19 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             });
 
             scope.$watch('canvasSize', function (newVal, oldVal) {
-                if(newVal) {
+                if (newVal) {
                     var update = false;
                     if (!oldVal) {
                         update = true;
                     }
-                    else if (newVal[0]===oldVal[0] && newVal[1]===oldVal[1]) {
+                    else if (newVal[0] === oldVal[0] && newVal[1] === oldVal[1]) {
                         update = false;
                     }
+                    else {
+                        update = true;
+                    }
 
-                    if(update) {
+                    if (update) {
                         cropHost.setCanvasSize(newVal);
                         updateResultImage(scope);
                     }
@@ -150,5 +152,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                 cropHost.destroy();
             });
         }
-    };
-}]);
+    }
+        ;
+}])
+;
