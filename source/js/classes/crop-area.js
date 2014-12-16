@@ -50,6 +50,9 @@ crop.factory('cropArea', ['cropCanvas', function (CropCanvas) {
     };
     CropArea.prototype.setSize = function (size) {
         size = this._processSize(size);
+        if(this._aspectRatio) {
+            size.h = size.w / this._aspectRatio;
+        }
         this._size = this._preventBoundaryCollision(size);
     };
 

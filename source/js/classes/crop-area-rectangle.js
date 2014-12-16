@@ -95,7 +95,6 @@ crop.factory('cropAreaRectangle', ['cropArea', function (CropArea) {
     CropArea.prototype.setAspectRatio = function (ratio) {
         this._aspectRatio = ratio;
         this._minSize = this._processSize(this._minSize);
-        this._minSize.h = this._minSize.w / this._aspectRatio;
         this.setSize(this._minSize);
     };
 
