@@ -157,7 +157,6 @@ crop.factory('cropAreaRectangle', ['cropArea', function (CropArea) {
                         h = (mouseCurX - s.x) / this._aspectRatio;
                         mouseCurY = se.y - h;
                     }
-                    ;
                     this.setSizeByCorners({x: s.x, y: mouseCurY}, {x: mouseCurX, y: se.y});
                     cursor = 'nesw-resize';
                     break;
@@ -177,7 +176,6 @@ crop.factory('cropAreaRectangle', ['cropArea', function (CropArea) {
                         h = (se.x - mouseCurX) / this._aspectRatio;
                         mouseCurY = s.y + h;
                     }
-                    ;
 
                     this.setSizeByCorners({x: mouseCurX, y: s.y}, {x: se.x, y: mouseCurY});
                     cursor = 'nesw-resize';
@@ -198,7 +196,6 @@ crop.factory('cropAreaRectangle', ['cropArea', function (CropArea) {
                         h = (mouseCurX - s.x) / this._aspectRatio;
                         mouseCurY = se.y - h;
                     }
-                    ;
                     this.setSizeByCorners({x: s.x, y: s.y}, {x: mouseCurX, y: mouseCurY});
                     cursor = 'nwse-resize';
                     break;
