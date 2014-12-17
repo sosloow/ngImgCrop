@@ -118,78 +118,91 @@ crop.factory('cropAreaRectangle', ['cropArea', function (CropArea) {
             var h = se.y - s.y;
             var w = se.x - s.x;
 
-                switch (this._resizeCtrlIsDragging) {
-                    case 0: // Top Left
-                        if(this._aspectRatio !== null) {
-                            h = w / this._aspectRatio;
-                            mouseCurY = se.y - h;
-                        };
+            switch (this._resizeCtrlIsDragging) {
+                case 0: // Top Left
+                    if (mouseCurY > s.y && h <= this._minSize.h) {
+                        //moving down and at min
+                        mouseCurY = s.y;
+                    }
+                    if (mouseCurX < 0) {
+                        mouseCurX = 0;
+                    }
+                    if (mouseCurX > s.x && w <= this._minSize.w) {
+                        //moving right and at min
+                        mouseCurX = s.x;
+                    }
 
-                        if(mouseCurY > s.y && h<=this._minSize.h) {
-                            //moving down and at min
-                            mouseCurY = s.y;
-                        }
-                        if(mouseCurX > s.x && w<=this._minSize.w) {
-                            //moving right and at min
-                            mouseCurX = s.x;
-                        }
+                    if (this._aspectRatio !== null) {
+                        h = (se.x - mouseCurX) / this._aspectRatio;
+                        mouseCurY = se.y - h;
+                    }
+                    ;
 
+                    this.setSizeByCorners({x: mouseCurX, y: mouseCurY}, {x: se.x, y: se.y});
+                    cursor = 'nwse-resize';
+                    break;
+                case 1: // Top Right
+                    if (mouseCurY > s.y && h <= this._minSize.h) {
+                        //moving down and at min
+                        mouseCurY = s.y;
+                    }
+                    if (mouseCurX > this._ctx.canvas.width) {
+                        mouseCurX = this._ctx.canvas.width;
+                    }
+                    if (mouseCurX < se.x && w <= this._minSize.w) {
+                        //moving left and at min
+                        mouseCurX = se.x;
+                    }
+                    if (this._aspectRatio !== null) {
+                        h = (mouseCurX - s.x) / this._aspectRatio;
+                        mouseCurY = se.y - h;
+                    }
+                    ;
+                    this.setSizeByCorners({x: s.x, y: mouseCurY}, {x: mouseCurX, y: se.y});
+                    cursor = 'nesw-resize';
+                    break;
+                case 2: // Bottom Left
+                    if (mouseCurY < se.y && h <= this._minSize.h) {
+                        //moving up and at min
+                        mouseCurY = se.y;
+                    }
+                    if (mouseCurX < 0) {
+                        mouseCurX = 0;
+                    }
+                    if (mouseCurX > s.x && w <= this._minSize.w) {
+                        //moving right and at min
+                        mouseCurX = s.x;
+                    }
+                    if (this._aspectRatio !== null) {
+                        h = (se.x - mouseCurX) / this._aspectRatio;
+                        mouseCurY = s.y + h;
+                    }
+                    ;
 
-
-                        this.setSizeByCorners({x: mouseCurX, y: mouseCurY}, {x: se.x, y: se.y});
-                        cursor = 'nwse-resize';
-                        break;
-                    case 1: // Top Right
-                        if(this._aspectRatio !== null) {
-                            h = w / this._aspectRatio;
-                            mouseCurY = se.y - h;
-                        };
-                        if(mouseCurY > s.y && h<=this._minSize.h) {
-                            //moving down and at min
-                            mouseCurY = s.y;
-                        }
-                        if(mouseCurX < se.x && w<=this._minSize.w) {
-                            //moving left and at min
-                            mouseCurX = se.x;
-                        }
-                        this.setSizeByCorners({x: s.x, y: mouseCurY}, {x: mouseCurX, y: se.y});
-                        cursor = 'nesw-resize';
-                        break;
-                    case 2: // Bottom Left
-                        if(this._aspectRatio !== null) {
-                            h = w / this._aspectRatio;
-                            mouseCurY = s.y + h;
-                        };
-                        if(mouseCurY < se.y && h<=this._minSize.h) {
-                            //moving up and at min
-                            mouseCurY = se.y;
-                        }
-                        if(mouseCurX > s.x && w<=this._minSize.w) {
-                            //moving right and at min
-                            mouseCurX = s.x;
-                        }
-                        this.setSizeByCorners({x: mouseCurX, y: s.y}, {x: se.x, y: mouseCurY});
-                        cursor = 'nesw-resize';
-                        break;
-                    case 3: // Bottom Right
-                        if(this._aspectRatio !== null) {
-                            h = w / this._aspectRatio;
-                            mouseCurY = s.y + h;
-                        };
-                        if(mouseCurY < se.y && h<=this._minSize.h) {
-                            //moving up and at min
-                            mouseCurY = se.y;
-                        }
-                        if(mouseCurX < se.x && w<=this._minSize.w) {
-                            //moving left and at min
-                            mouseCurX = se.x;
-                        }
-                        this.setSizeByCorners({x: s.x, y: s.y}, {x: mouseCurX, y: mouseCurY});
-                        cursor = 'nwse-resize';
-                        break;
-                }
-
-
+                    this.setSizeByCorners({x: mouseCurX, y: s.y}, {x: se.x, y: mouseCurY});
+                    cursor = 'nesw-resize';
+                    break;
+                case 3: // Bottom Right
+                    if (mouseCurY < se.y && h <= this._minSize.h) {
+                        //moving up and at min
+                        mouseCurY = se.y;
+                    }
+                    if (mouseCurX > this._ctx.canvas.width) {
+                        mouseCurX = this._ctx.canvas.width;
+                    }
+                    if (mouseCurX < se.x && w <= this._minSize.w) {
+                        //moving left and at min
+                        mouseCurX = se.x;
+                    }
+                    if (this._aspectRatio !== null) {
+                        h = (mouseCurX - s.x) / this._aspectRatio;
+                        mouseCurY = se.y - h;
+                    }
+                    ;
+                    this.setSizeByCorners({x: s.x, y: s.y}, {x: mouseCurX, y: mouseCurY});
+                    cursor = 'nwse-resize';
+                    break;
+            }
 
 
             this._resizeCtrlIsHover = this._resizeCtrlIsDragging;
