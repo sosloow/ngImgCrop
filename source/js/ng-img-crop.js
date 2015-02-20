@@ -19,7 +19,8 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             onChange: '&',
             onLoadBegin: '&',
             onLoadDone: '&',
-            onLoadError: '&'
+            onLoadError: '&',
+            'clickToCrop': '='
         },
         template: '<canvas></canvas>',
         controller: ['$scope', function ($scope) {
@@ -151,6 +152,10 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             scope.$on('$destroy', function () {
                 cropHost.destroy();
             });
+
+            scope.clickToCrop = function() {
+                console.log('woooooo')
+            }
         }
     }
         ;

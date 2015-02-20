@@ -98,6 +98,10 @@
     <button ng-click="show()">Show</button>
 </div>
 
+<div>
+    <button ng-click="bob()">Crop!</button>
+</div>
+
 
 <pre>
     {{areaCoords|json}}
@@ -109,6 +113,7 @@
               result-image="model1.resImageDataURI"
               change-on-fly="changeOnFly"
               area-type="rectangle"
+              area-min-size="300"
               area-coords="areaCoords"
               canvas-size="stuff.getDimensions()"
               result-image-format="image/png"
@@ -120,6 +125,7 @@
               on-load-done="onLoadDone()"
               on-load-error="onLoadError()"
               area-coords="model1.areaCoords"
+              click-to-crop="bob"
             ></img-crop>
     <!--aspect-ratio="aspectRatio"-->
     <!--aspect-ratio="1.77777777777"-->
@@ -137,8 +143,12 @@
 <script type="text/javascript">
     angular.module('app', ['ngImgCrop'])
             .controller('Ctrl', function ($scope) {
+
+
+
                 $scope.areaCoords = '';
                 $scope.dims = null;
+
 
                 $scope.resultSize = {
                     h: 200,
@@ -147,8 +157,8 @@
 
                 $scope.model1 = {
                     resImageDataURI: '',
-                    imageDataURI: '',
-                    hidden: 'hidden'
+                    imageDataURI: 'http://i.chzbgr.com/maxW500/8389339392/hB7D0EE41/',
+                    hidden: ''
                 };
 
                 $scope.stuff = {
