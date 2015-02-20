@@ -19,7 +19,8 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             onChange: '&',
             onLoadBegin: '&',
             onLoadDone: '&',
-            onLoadError: '&'
+            onLoadError: '&',
+            manuallyCrop: '='
         },
         template: '<canvas></canvas>',
         controller: ['$scope', function ($scope) {
@@ -82,7 +83,9 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                     }
                 }))
                 .on('area-move-end area-resize-end image-updated', fnSafeApply(function (scope) {
-                    updateResultImage(scope);
+                    if(!!!scope.manuallyCrop){
+                        updateResultImage(scope);
+                    }
                 }));
 
             // Sync CropHost with Directive's options
@@ -134,6 +137,9 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                 }
             });
 
+            scope.manuallyCrop = function() {
+                updateResultImage(scope);
+            }
 
             // Update CropHost dimensions when the directive element is resized
             scope.$watch(
@@ -151,6 +157,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             scope.$on('$destroy', function () {
                 cropHost.destroy();
             });
+
         }
     }
         ;
