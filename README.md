@@ -120,7 +120,7 @@ The following code enables to select an image using a file input and crop it. Th
    [on-load-begin="{expression"]
    [on-load-done="{expression"]
    [on-load-error="{expression"]
-   [click-to-crop="{function"}]
+   [manually-crop="{function"}]
 ></img-crop>
 ```
 
