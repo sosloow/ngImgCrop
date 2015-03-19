@@ -83,7 +83,6 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                     }
                 }))
                 .on('area-move-end area-resize-end image-updated', fnSafeApply(function (scope) {
-                    console.log(attrs.manuallyCrop);
                     if(!!!attrs.manuallyCrop) {
                         updateResultImage(scope);
                     }
