@@ -129,6 +129,16 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
             }
         };
 
+        var onMouseOver = function(e){
+            if (image !== null) {
+                var offset = getElementOffset(ctx.canvas),
+                pageX, pageY;
+                pageX = e.pageX;
+                pageY = e.pageY;
+                theArea.processMouseMove(pageX - offset.left, pageY - offset.top);
+            }
+        };
+
         var onMouseMove = function (e) {
             if (image !== null) {
                 var offset = getElementOffset(ctx.canvas),
@@ -160,10 +170,14 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
                 }
                 theArea.processMouseDown(pageX - offset.left, pageY - offset.top);
                 drawScene();
+                $document.on('touchmove', onMouseMove);
+                $document.on('mousemove', onMouseMove);
             }
         };
 
         var onMouseUp = function (e) {
+            $document.off('mousemove', onMouseMove);
+            $document.off('touchmove', onMouseMove);
             if (image !== null) {
                 var offset = getElementOffset(ctx.canvas),
                     pageX, pageY;
@@ -379,22 +393,20 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         theArea = new CropAreaCircle(ctx, events);
 
         // Init Mouse Event Listeners
-        $document.on('mousemove', onMouseMove);
+        elCanvas.on('mousemove', onMouseOver);
         elCanvas.on('mousedown', onMouseDown);
         $document.on('mouseup', onMouseUp);
 
         // Init Touch Event Listeners
-        $document.on('touchmove', onMouseMove);
         elCanvas.on('touchstart', onMouseDown);
         $document.on('touchend', onMouseUp);
 
         // CropHost Destructor
         this.destroy = function () {
-            $document.off('mousemove', onMouseMove);
+            elCanvas.off('mousemove', onMouseOver);
             elCanvas.off('mousedown', onMouseDown);
             $document.off('mouseup', onMouseMove);
 
-            $document.off('touchmove', onMouseMove);
             elCanvas.off('touchstart', onMouseDown);
             $document.off('touchend', onMouseMove);
 

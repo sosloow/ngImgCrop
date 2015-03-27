@@ -120,6 +120,7 @@ The following code enables to select an image using a file input and crop it. Th
    [on-load-begin="{expression"]
    [on-load-done="{expression"]
    [on-load-error="{expression"]
+   [manually-crop="{function"}]
 ></img-crop>
 ```
 
@@ -170,6 +171,10 @@ Assignable angular expression to data-bind to. NgImgCrop puts a data uri of a cr
 ### on-load-error
 
 *Optional*. Expression to evaluate when the source image didn't load.
+
+### manually-crop
+
+*Optional*. Ability to manually run the cropping functionality. E.G. could be called when a button is clicked. If this property is set, cropping on the area-move-end event will be disabled.
 
 
 ## License
