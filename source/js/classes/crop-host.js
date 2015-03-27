@@ -129,17 +129,12 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
             }
         };
 
-        var onMousehover = function(e){
+        var onMouseOver = function(e){
             if (image !== null) {
                 var offset = getElementOffset(ctx.canvas),
-                    pageX, pageY;
-                if (e.type === 'touchmove') {
-                    pageX = getChangedTouches(e)[0].pageX;
-                    pageY = getChangedTouches(e)[0].pageY;
-                } else {
-                    pageX = e.pageX;
-                    pageY = e.pageY;
-                }
+                pageX, pageY;
+                pageX = e.pageX;
+                pageY = e.pageY;
                 theArea.processMouseMove(pageX - offset.left, pageY - offset.top);
             }
         };
@@ -398,7 +393,7 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         theArea = new CropAreaCircle(ctx, events);
 
         // Init Mouse Event Listeners
-        elCanvas.on('mousemove', onMousehover);
+        elCanvas.on('mousemove', onMouseOver);
         elCanvas.on('mousedown', onMouseDown);
         $document.on('mouseup', onMouseUp);
 
@@ -408,7 +403,7 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
 
         // CropHost Destructor
         this.destroy = function () {
-            elCanvas.off('mousemove', onMousehover);
+            elCanvas.off('mousemove', onMouseOver);
             elCanvas.off('mousedown', onMouseDown);
             $document.off('mouseup', onMouseMove);
 

@@ -5,7 +5,7 @@
  * Copyright (c) 2015 Alex Kaul
  * License: MIT
  *
- * Generated at Thursday, March 19th, 2015, 1:20:47 PM
+ * Generated at Friday, March 27th, 2015, 3:10:15 PM
  */
 (function() {
 'use strict';
@@ -1028,17 +1028,12 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
             }
         };
 
-        var onMousehover = function(e){
+        var onMouseOver = function(e){
             if (image !== null) {
                 var offset = getElementOffset(ctx.canvas),
-                    pageX, pageY;
-                if (e.type === 'touchmove') {
-                    pageX = getChangedTouches(e)[0].pageX;
-                    pageY = getChangedTouches(e)[0].pageY;
-                } else {
-                    pageX = e.pageX;
-                    pageY = e.pageY;
-                }
+                pageX, pageY;
+                pageX = e.pageX;
+                pageY = e.pageY;
                 theArea.processMouseMove(pageX - offset.left, pageY - offset.top);
             }
         };
@@ -1296,7 +1291,7 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         theArea = new CropAreaCircle(ctx, events);
 
         // Init Mouse Event Listeners
-        elCanvas.on('mousemove', onMousehover);
+        elCanvas.on('mousemove', onMouseOver);
         elCanvas.on('mousedown', onMouseDown);
         $document.on('mouseup', onMouseUp);
 
@@ -1306,7 +1301,7 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
 
         // CropHost Destructor
         this.destroy = function () {
-            elCanvas.off('mousemove', onMousehover);
+            elCanvas.off('mousemove', onMouseOver);
             elCanvas.off('mousedown', onMouseDown);
             $document.off('mouseup', onMouseMove);
 
@@ -1426,7 +1421,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                     }
                 }))
                 .on('area-move-end area-resize-end image-updated', fnSafeApply(function (scope) {
-                    if(!!!attrs.manuallyCrop) {
+                    if(!attrs.manuallyCrop) {
                         updateResultImage(scope);
                     }
                 }));
@@ -1482,7 +1477,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
 
             scope.manuallyCrop = function() {
                 updateResultImage(scope);
-            }
+            };
 
             // Update CropHost dimensions when the directive element is resized
             scope.$watch(

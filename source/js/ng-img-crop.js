@@ -83,7 +83,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                     }
                 }))
                 .on('area-move-end area-resize-end image-updated', fnSafeApply(function (scope) {
-                    if(!!!attrs.manuallyCrop) {
+                    if(!attrs.manuallyCrop) {
                         updateResultImage(scope);
                     }
                 }));
@@ -139,7 +139,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
 
             scope.manuallyCrop = function() {
                 updateResultImage(scope);
-            }
+            };
 
             // Update CropHost dimensions when the directive element is resized
             scope.$watch(
