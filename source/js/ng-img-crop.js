@@ -9,6 +9,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
 
             changeOnFly: '=',
             areaCoords: '=',
+            liveUpdateAreaCoords: '=',
             areaType: '@',
             aspectRatio: '=',
             areaMinSize: '=',
@@ -80,6 +81,10 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                 .on('area-move area-resize', fnSafeApply(function (scope) {
                     if (!!scope.changeOnFly) {
                         updateResultImage(scope);
+                    } else {
+                        if(attrs.liveUpdateAreaCoords) {
+                            updateAreaCoords(scope);
+                        }
                     }
                 }))
                 .on('area-move-end area-resize-end image-updated', fnSafeApply(function (scope) {

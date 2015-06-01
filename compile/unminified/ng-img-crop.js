@@ -5,7 +5,7 @@
  * Copyright (c) 2015 Alex Kaul
  * License: MIT
  *
- * Generated at Friday, March 27th, 2015, 3:10:15 PM
+ * Generated at Monday, June 1st, 2015, 3:25:43 PM
  */
 (function() {
 'use strict';
@@ -1419,10 +1419,18 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                     if (!!scope.changeOnFly) {
                         updateResultImage(scope);
                     }
+
+                    if(attrs.liveUpdateAreaCoords) {
+                        updateAreaCoords(scope);
+                    }
                 }))
                 .on('area-move-end area-resize-end image-updated', fnSafeApply(function (scope) {
                     if(!attrs.manuallyCrop) {
                         updateResultImage(scope);
+                    }
+
+                    if(attrs.liveUpdateAreaCoords) {
+                        updateAreaCoords(scope);
                     }
                 }));
 
