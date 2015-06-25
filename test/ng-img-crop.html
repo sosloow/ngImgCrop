@@ -98,6 +98,10 @@
     <button ng-click="show()">Show</button>
 </div>
 
+<div>
+    <button ng-click="crop()">Manually Crop</button>
+</div>
+
 
 <pre>
     {{areaCoords|json}}
@@ -120,6 +124,7 @@
               on-load-done="onLoadDone()"
               on-load-error="onLoadError()"
               area-coords="model1.areaCoords"
+              <!--manually-crop="crop"-->
             ></img-crop>
     <!--aspect-ratio="aspectRatio"-->
     <!--aspect-ratio="1.77777777777"-->
@@ -177,6 +182,10 @@
                 };
 
                 $scope.size = 'big';
+
+                $scope.crop = function(){
+//                    console.log('manually cropped');
+                };
 
                 $scope.onChange = function ($dataURI) {
 //                    console.log('onChange fired');

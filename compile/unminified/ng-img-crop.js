@@ -5,7 +5,7 @@
  * Copyright (c) 2015 Alex Kaul
  * License: MIT
  *
- * Generated at Monday, March 2nd, 2015, 3:29:42 PM
+ * Generated at Thursday, June 25th, 2015, 1:52:01 PM
  */
 (function() {
 'use strict';
@@ -1028,6 +1028,16 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
             }
         };
 
+        var onMouseOver = function(e){
+            if (image !== null) {
+                var offset = getElementOffset(ctx.canvas),
+                pageX, pageY;
+                pageX = e.pageX;
+                pageY = e.pageY;
+                theArea.processMouseMove(pageX - offset.left, pageY - offset.top);
+            }
+        };
+
         var onMouseMove = function (e) {
             if (image !== null) {
                 var offset = getElementOffset(ctx.canvas),
@@ -1059,10 +1069,14 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
                 }
                 theArea.processMouseDown(pageX - offset.left, pageY - offset.top);
                 drawScene();
+                $document.on('touchmove', onMouseMove);
+                $document.on('mousemove', onMouseMove);
             }
         };
 
         var onMouseUp = function (e) {
+            $document.off('mousemove', onMouseMove);
+            $document.off('touchmove', onMouseMove);
             if (image !== null) {
                 var offset = getElementOffset(ctx.canvas),
                     pageX, pageY;
@@ -1276,22 +1290,20 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         theArea = new CropAreaCircle(ctx, events);
 
         // Init Mouse Event Listeners
-        $document.on('mousemove', onMouseMove);
+        elCanvas.on('mousemove', onMouseOver);
         elCanvas.on('mousedown', onMouseDown);
         $document.on('mouseup', onMouseUp);
 
         // Init Touch Event Listeners
-        $document.on('touchmove', onMouseMove);
         elCanvas.on('touchstart', onMouseDown);
         $document.on('touchend', onMouseUp);
 
         // CropHost Destructor
         this.destroy = function () {
-            $document.off('mousemove', onMouseMove);
+            elCanvas.off('mousemove', onMouseOver);
             elCanvas.off('mousedown', onMouseDown);
             $document.off('mouseup', onMouseMove);
 
-            $document.off('touchmove', onMouseMove);
             elCanvas.off('touchstart', onMouseDown);
             $document.off('touchend', onMouseMove);
 
@@ -1334,6 +1346,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
 
             changeOnFly: '=',
             areaCoords: '=',
+            liveUpdateAreaCoords: '=',
             areaType: '@',
             aspectRatio: '=',
             areaMinSize: '=',
@@ -1344,13 +1357,14 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             onChange: '&',
             onLoadBegin: '&',
             onLoadDone: '&',
-            onLoadError: '&'
+            onLoadError: '&',
+            manuallyCrop: '=?'
         },
         template: '<canvas></canvas>',
         controller: ['$scope', function ($scope) {
             $scope.events = new CropPubSub();
         }],
-        link: function (scope, element/*, attrs*/) {
+        link: function (scope, element, attrs) {
             // Init Events Manager
             var events = scope.events;
 
@@ -1404,10 +1418,16 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                 .on('area-move area-resize', fnSafeApply(function (scope) {
                     if (!!scope.changeOnFly) {
                         updateResultImage(scope);
+                    } else {
+                        if(attrs.liveUpdateAreaCoords) {
+                            updateAreaCoords(scope);
+                        }
                     }
                 }))
                 .on('area-move-end area-resize-end image-updated', fnSafeApply(function (scope) {
-                    updateResultImage(scope);
+                    if(!attrs.manuallyCrop) {
+                        updateResultImage(scope);
+                    }
                 }));
 
             // Sync CropHost with Directive's options
@@ -1459,6 +1479,10 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                 }
             });
 
+            scope.manuallyCrop = function() {
+                updateResultImage(scope);
+            };
+
             // Update CropHost dimensions when the directive element is resized
             scope.$watch(
                 function () {
@@ -1475,6 +1499,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             scope.$on('$destroy', function () {
                 cropHost.destroy();
             });
+
         }
     }
         ;

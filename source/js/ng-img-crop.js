@@ -9,6 +9,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
 
             changeOnFly: '=',
             areaCoords: '=',
+            liveUpdateAreaCoords: '=',
             areaType: '@',
             aspectRatio: '=',
             areaMinSize: '=',
@@ -19,13 +20,14 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             onChange: '&',
             onLoadBegin: '&',
             onLoadDone: '&',
-            onLoadError: '&'
+            onLoadError: '&',
+            manuallyCrop: '=?'
         },
         template: '<canvas></canvas>',
         controller: ['$scope', function ($scope) {
             $scope.events = new CropPubSub();
         }],
-        link: function (scope, element/*, attrs*/) {
+        link: function (scope, element, attrs) {
             // Init Events Manager
             var events = scope.events;
 
@@ -79,10 +81,16 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                 .on('area-move area-resize', fnSafeApply(function (scope) {
                     if (!!scope.changeOnFly) {
                         updateResultImage(scope);
+                    } else {
+                        if(attrs.liveUpdateAreaCoords) {
+                            updateAreaCoords(scope);
+                        }
                     }
                 }))
                 .on('area-move-end area-resize-end image-updated', fnSafeApply(function (scope) {
-                    updateResultImage(scope);
+                    if(!attrs.manuallyCrop) {
+                        updateResultImage(scope);
+                    }
                 }));
 
             // Sync CropHost with Directive's options
@@ -134,6 +142,9 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
                 }
             });
 
+            scope.manuallyCrop = function() {
+                updateResultImage(scope);
+            };
 
             // Update CropHost dimensions when the directive element is resized
             scope.$watch(
@@ -151,6 +162,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function ($time
             scope.$on('$destroy', function () {
                 cropHost.destroy();
             });
+
         }
     }
         ;
