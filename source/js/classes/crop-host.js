@@ -306,13 +306,11 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         };
 
         this.getResultImageSize = function () {
-            if (resImgSize == "selection") {
-                return theArea.getSize();
-            }
-            return resImgSize;
+            return theArea.getSize();
         };
 
         this.setResultImageSize = function (size) {
+            console.log(size);
             if (angular.isUndefined(size)) {
                 return;
             }

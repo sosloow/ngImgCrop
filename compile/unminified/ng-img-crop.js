@@ -2,10 +2,10 @@
  * ngImgCrop v0.3.1
  * https://github.com/alexk111/ngImgCrop
  *
- * Copyright (c) 2015 Alex Kaul
+ * Copyright (c) 2015 Stepan Shilin
  * License: MIT
  *
- * Generated at Thursday, June 25th, 2015, 1:52:01 PM
+ * Generated at Friday, June 26th, 2015, 2:45:18 PM
  */
 (function() {
 'use strict';
@@ -1204,13 +1204,11 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         };
 
         this.getResultImageSize = function () {
-            if (resImgSize == "selection") {
-                return theArea.getSize();
-            }
-            return resImgSize;
+            return theArea.getSize();
         };
 
         this.setResultImageSize = function (size) {
+            console.log(size);
             if (angular.isUndefined(size)) {
                 return;
             }
