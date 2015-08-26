@@ -299,9 +299,12 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
             if (angular.isUndefined(size)) {
                 return;
             }
-            size = {w: parseInt(size.w, 10),
-                h: parseInt(size.h, 10)};
+            size = {w: parseInt(size, 10),
+                    h: parseInt(size, 10)};
+
             if (!isNaN(size.w) && !isNaN(size.h)) {
+              theArea.setMinSize(size);
+              drawScene();
             }
         };
 
@@ -310,7 +313,6 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'crop
         };
 
         this.setResultImageSize = function (size) {
-            console.log(size);
             if (angular.isUndefined(size)) {
                 return;
             }
